@@ -1,10 +1,9 @@
 // ConsoleApplication3.cpp: определяет точку входа для консольного приложения.
 //
 
-#include "stdafx.h"
 #include <stdio.h>
 #include <math.h>
-#include <locale.h>
+//#include <locale.h>
 #include <conio.h>
 
 #pragma warning(disable: 4996)
@@ -15,7 +14,7 @@
 // Определить наибольшую и наименьшую цифру в записи
 // Преобразовать число: оставить в записи только четные цифры в том же порядке, в котором они вводились пользователем
 
-int _tmain(int argc, _TCHAR* argv[])
+int main()
 {
 	int num(0), holder(0), in_cycle(0), holder2(0);
 	int num_quant(0);
@@ -24,11 +23,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	int lowest(9);
 	int recomb1(0), recomb2(1);
 
-	setlocale(LC_ALL, "Rus");
+	//setlocale(LC_ALL, "Rus");
 
-	printf("������� ����� �����:\n");
+	printf("Введите любое число:\n");
 	scanf("%d", &num);
-	printf("�� ����� �����\n%d\n", num);
+	printf("Вы ввели число\n%d\n", num);
 
 	//printf("Проба деления по модулю на 10: %d\n", num%10);
 	//printf("Проба деления по модулю на 100: %d\n", num%100);
