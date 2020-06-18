@@ -2,21 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <locale.h>
+#include <Windows.h>
 
 int main()
 {
-    FILE *pf(NULL);
-    char *fn = "C:\\Users\\igors\\My_Code\\PureC\\Webinars\\2020-05-28\\Example1.txt";
+    //setlocale(LC_CTYPE, "Russian_Russia.1251");
+    //const UINT CodePageID = 1251 ;
+    //SetConsoleCP(CodePageID);
     
-    if ((pf = fopen(fn, "r")) == NULL)
-        printf("Unable to open file %s", fn);
-        ferror(pf);
-        perror("");
-        clearerr(pf);
+    char c;
+    
+    printf("Some test!\n");
+    printf("Какой-то тест!\n");
+    scanf("%c", &c);
 
+    printf("%c\n", c);
 
-    fclose(pf);
     getch();
-    return 0;    
+    return 0;
 }
 
