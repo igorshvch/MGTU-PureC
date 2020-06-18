@@ -158,8 +158,8 @@ void menu_manage_dict()
         "Удалить запись",
         "Удалить определение",
         "Проверить наличие термина в словаре",
-        "Печать записи",
-        "Печать словаря",
+        "Печать в консоль",
+        "Сортировка",
         "Сохранить в файл",
         "Удалить словарь"
         };
@@ -221,15 +221,52 @@ void menu_manage_dict()
                         name = read_name_from_console();
                         find_record(name);
                         break;
-                    case 5: //печать термина и определения в консоль
+                    case 5: //печать в консоль
+                        menu_console_print();
                         break;
-                    case 6: //печать всего словаря в консоль
+                    case 6: //сортировка
                         break;
                     case 7: //сохранить в файл
                         save_flag = true;
                         break;
                     case 8: //удалить словарь
                         save_flag = true;
+                        break;
+                }
+        }
+}
+
+
+void menu_console_print()
+{
+    char *fname = "menu_console_print";
+
+    const int N = 4;
+    char *options[N] = {
+        "Выход",
+        "Печать терминов",
+        "Печать определений",
+        "Печать терминов и определений"
+        };
+    int selection_holder = 1;
+
+    while (selection_holder != 0)
+        {
+            user_input_reader(&selection_holder, options, N, "Меню печати в консоль");
+            printf(">>> %d\n", selection_holder);
+            switch(selection_holder)
+                {
+                    case 0:
+                        printf("%sЗакрытие меню печати в консоль\n", INDENT);
+                        break;
+                    case 1:
+                        print_names();
+                        break;
+                    case 2:
+                        print_defns();
+                        break;
+                    case 3:
+                        print_all_dict_to_console();
                         break;
                 }
         }

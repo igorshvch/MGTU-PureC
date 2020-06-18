@@ -24,14 +24,16 @@ char *str_duplicate(char *str)
     if (copy_str != NULL)
         {
             copy_str = strcpy(copy_str, str);
-            printf("FUNC %s -> строка '%10s' успещно скопирована\n", fname, copy_str);
+            printf("FUNC %s -> строка '%s' успещно скопирована\n", fname, copy_str);
         }
+    else
+        printf("FUNC %s -> не удалось выделить память\n", fname);
     
     return copy_str;
 }
 
 
-nlist *lookup(char *name)
+nlist *lookup(char *name, bool print_flag)
 {
     char *fname = "lookup";
     int hashval;
@@ -42,7 +44,8 @@ nlist *lookup(char *name)
     for(np = hashtable[hashval]; np != NULL; np = np->next)
         if (strcmp(name, np->name) == 0)
             {
-                printf("FUNC %s -> ключ '%s' уже в словаре\n", fname, name);
+                if (print_flag)
+                    printf("FUNC %s -> ключ '%s' уже в словаре\n", fname, name);
                 return np;
             }
     
@@ -121,7 +124,7 @@ void erase_from_dict(char *name)
 }
 
 
-void find_record(char *name)
+char *find_record(char *name)
 {
     char *fname = "find_record";
     nlist *np;
@@ -130,9 +133,11 @@ void find_record(char *name)
         {
             printf("FUNC %s -> запись '%s' найдена!\n", fname, name);
             print_nlist(fname, np);
+            return np->defn;
         }
     else
         printf("FUNC %s -> запись НЕ '%s' найдена!\n", fname, name);
+        return NULL;
 }
 
 
