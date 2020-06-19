@@ -1,7 +1,7 @@
 #include "miohandler.h"
 
 
-char *read_name_from_console()
+char *read_name_from_console(bool save_name_flag)
 {
     char *fname = "read_name_from_console";
 
@@ -37,8 +37,9 @@ char *read_name_from_console()
 
     free((void*) name);
 
-    if (!lookup(name_trunkate))
-        table_names = append_str_to_table(table_names, name_trunkate);
+    if (save_name_flag)
+        if (!lookup(name_trunkate))
+            append_name_to_table(name_trunkate);
 
     return name_trunkate;
 }
@@ -84,26 +85,81 @@ char *read_defn_from_console()
 }
 
 
-str_table append_str_to_table(str_table table, char *str)
+void append_name_to_table(char *str)
 {
-    char *fname = "append_str_to_table";
+    char *fname = "append_name_to_table";
+    
     char **tmp;
     int rows;
 
-    printf("FUNC %s -> начало выполнения функции\n", fname);
-    table.rows++;
-    printf("FUNC %s -> количество строк в таблице увеличено: %d\n", fname, table.rows);
+    table_names.rows++;
+    printf("FUNC %s -> количество строк в таблице терминов увеличено: %d\n", fname, table_names.rows);
 
-    tmp = (char**) realloc(table.records, sizeof(char*)*table.rows);
+    tmp = (char**) realloc(table_names.records, sizeof(char*)*table_names.rows);
     if (tmp == NULL)
         {
             printf("\nFUNC %s -> не удалость выделить память, завершение выполнения функции\n\n", fname);
         }
-    table.records = tmp;
-    table.records[table.rows-1] = str;
-    printf("FUNC %s -> запись '%s' добавлена в таблицу\n", fname, str);
+    table_names.records = tmp;
+    table_names.records[table_names.rows-1] = str;
+    printf("FUNC %s -> запись '%s' добавлена в таблицу терминов\n", fname, str);
+}
 
-    return table;
+
+void delete_name_from_table(char *str)
+{
+    char *fname = "delete_name_from_table";
+     
+    int i, j;
+    bool found_flag = false;
+    char* tmp;
+
+    for (i=0; i<table_names.rows; i++)
+            if (strcmp(table_names.records[i], str) == 0)
+                {
+                    free((void*) table_names.records[i]);
+                    found_flag = true;
+                    printf("FUNC %s -> запись '%s' найдена в таблице терминов. Внутренний номер строки: %d\n", fname, str, i);
+                    break;
+                }
+    if (found_flag)
+        {
+            if (i == 0)
+                {   
+                    printf("FUNC %s -> удаляем запись на строке %d\n", fname, i);
+                    for (j=0; j<table_names.rows-1; j++)
+                        table_names.records[j] = table_names.records[j+1];
+                    free((void*) table_names.records[++j]);
+                    printf("FUNC %s -> удаление прошло успешно\n", fname);
+                }
+            else
+                {   
+                    printf("FUNC %s -> удаляем запись на строке %d\n", fname, i);
+                    for (j=i; j<(table_names.rows-1); j++)
+                        table_names.records[j] = table_names.records[j+1];
+                    printf("FUNC %s -> удаление прошло успешно\n", fname);
+                }
+            table_names.rows--;
+            printf("FUNC %s -> запись '%s' удалена из таблицы терминов\n", fname, str);
+        }
+    else
+        printf("FUNC %s -> запись '%s' не найдена в таблице терминов\n", fname, str);
+}
+
+
+void delete_table()
+{
+    char *fname = "delete_table";
+    
+    int i;
+
+    for(i=0; i<table_names.rows; i++)
+        free((void*) table_names.records[i]);
+    free((void*) table_names.records);
+    
+    table_names.rows = 0;
+
+    printf("FUNC %s -> таблица терминов удалена", fname);
 }
 
 
@@ -143,6 +199,7 @@ void print_defns()
             else
                 printf("FUNC %s -> ошибка в поиске определения, слово № %d: %s", fname, i, np->name);
         }
+    printf("\t===========================================\n\n");
 }
 
 
@@ -158,7 +215,7 @@ void print_all_dict_to_console()
     for (i=0; i<table_names.rows; i++)
         {
             np = lookup(table_names.records[i], false);
-            if (np)
+            if (np != NULL)
                 {
                     printf("\n>>> %s\n", np->name);
                     printf("%s\n", np->defn);
@@ -166,4 +223,16 @@ void print_all_dict_to_console()
             else
                 printf("FUNC %s -> ошибка в поиске определения, слово № %d: %s", fname, i, np->name);
         }
+    printf("\n\t===========================================\n\n");
+}
+
+
+int compare_names_by_length(const void *name1, const void *name2)             //функция сравнения, которая будет использована функцией сортировки qsort()
+{
+    char *w1, *w2;
+
+    w1 = (char*) name1;
+    w2 = (char*) name2;
+
+    return strlen((char*) w1) - strlen((char*) w2);
 }

@@ -8,7 +8,6 @@
 
 void user_input_reader(int *selection_holder, char **options, int options_num, char *menu_level);
 void menu_main();
-void menu_creation();
 void menu_create_from_console();
 void menu_open();
 void menu_manage_dict();

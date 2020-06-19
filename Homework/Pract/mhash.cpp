@@ -103,41 +103,84 @@ void erase_from_dict(char *name)
 
     prev_np = NULL;
 
-    hashval = mhash(name);    
-    
-    for (np = hashtable[hashval]; np != NULL; np = np->next)
-        if (strcmp(name, np->name) == 0)
-            break;
-        prev_np = np;
-    
+    np = lookup(name, false);
+
     if (np != NULL)
-        if (prev_np == NULL)
-            hashtable[hashval] = prev_np;
-        else
-            {
-                prev_np->next = np->next;
-            }
-        free((void*) np->name);
-        free((void*) np->defn);
-        free((void*) np);
-        printf("FUNC %s -> запись c ключом '%s' удалена:\n", fname, name);
+        {
+            hashval = mhash(name);    
+            
+            for (np = hashtable[hashval]; np != NULL; np = np->next)
+                if (strcmp(name, np->name) == 0)
+                    break;
+                prev_np = np;
+            
+            if (np != NULL)
+                if (prev_np == NULL)
+                    hashtable[hashval] = prev_np;
+                else
+                    {
+                        prev_np->next = np->next;
+                    }
+                free((void*) np->name);
+                free((void*) np->defn);
+                free((void*) np);
+                printf("FUNC %s -> запись c ключом '%s' удалена\n", fname, name);
+        }
+    else
+        printf("FUNC %s -> запись c ключом '%s' в словаре отсутствует\n", fname, name);
 }
 
 
-char *find_record(char *name)
+void erase_defn(char *name)
+{
+    char *fname = "erase_defn";
+    int hashval;
+    nlist *np;
+
+    np = lookup(name, false);
+
+    if (np != NULL)
+        {
+            np->defn = "";
+            printf("FUNC %s -> определение термина '%s' удалено\n", fname, name);
+        }
+    else
+        printf("FUNC %s -> запись с ключом '%s' в словаре отсутствует\n", fname, name);
+}
+
+
+void find_record(char *name)
 {
     char *fname = "find_record";
     nlist *np;
 
-    if ((np = lookup(name)) != NULL)
+    np = lookup(name, false);
+
+    if (np != NULL)
         {
             printf("FUNC %s -> запись '%s' найдена!\n", fname, name);
             print_nlist(fname, np);
-            return np->defn;
         }
     else
         printf("FUNC %s -> запись НЕ '%s' найдена!\n", fname, name);
-        return NULL;
+}
+
+
+void erase_all_dict(char **records, int rows)
+{
+    char *fname = "erase_all_dict";
+
+    int i;
+    nlist *np;
+
+    for(i=0; i<rows; i++)
+        {
+            np = lookup(records[i], false);
+            free((void*) np->name);
+            free((void*) np->defn);
+            free((void*) np);
+        }
+    printf("FUNC %s -> словарь удален\n", fname);
 }
 
 

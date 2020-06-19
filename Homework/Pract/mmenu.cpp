@@ -19,11 +19,12 @@ void user_input_reader(int *selection_holder, char **options, int options_num, c
         {
             for (int i = 0; i<options_num; i++)
                 printf("%s%d) %s\n", INDENT, i, options[i]);
+            printf(">>> ");
             option = getch();
             if ((option >= '0') && (option <= last_option_char))
                 break;
             else
-                printf("%s%sВведено некорректное значение!\n\n", INDENT, INDENT);
+                printf("\n%s%sВведено некорректное значение!\n\n", INDENT, INDENT);
         }
     *selection_holder = option - '0';
 }
@@ -45,12 +46,12 @@ void menu_main()
     char *fname = "menu_main";
     
     const int N = 3;
-    char *options[N] = {"Выход", "Создать", "Открыть"};
+    char *options[N] = {"Выход", "Создать из консоли", "Открыть из файла"};
     int selection_holder = 0;
 
     user_input_reader(&selection_holder, options, N, "Главное меню");
 
-    printf(">>> %d\n", selection_holder);
+    printf("%d\n", selection_holder);
 
     switch (selection_holder)
         {
@@ -58,40 +59,14 @@ void menu_main()
                 printf("Завершение программы\n");
                 break;
             case 1:
-                menu_creation();
-                break;
-            case 2:
-                menu_open();
-                break;
-        }
-}
-
-
-void menu_creation()
-{
-    char *fname = "menu_creation";
-
-    const int N = 3;
-    char *options[N] = {"Выход", "Создать из консоли", "Создать из файла"};
-    int selection_holder = 0;
-
-    user_input_reader(&selection_holder, options, N, "Меню создания словаря");
-
-    printf(">>> %d\n", selection_holder);
-
-    switch (selection_holder)
-        {
-            case 0:
-                printf("%sЗакрытие меню создания, завершение программы\n", INDENT);
-                break;
-            case 1:
                 menu_create_from_console();
                 break;
             case 2:
-                ; // здесь должны быть функция, обрабатывающая ввод, связанный с созданием файла
+                menu_open(); //ДОДЕЛАТЬ!
                 break;
         }
 }
+
 
 void menu_create_from_console()
 {
@@ -106,14 +81,17 @@ void menu_create_from_console()
 
     while ((option - '0') != 0)
         {
-            printf("%sВведите слово:\n", INDENT);
+            printf("%sВведите слово:\n>>> ", INDENT);
             name = read_name_from_console();
-            printf("%sВведите определение:\n", INDENT);
+            printf("%sВведите определение:\n>>> ", INDENT);
             defn = read_defn_from_console();
             write_to_dict(name, defn);
-            printf("%sПродолжить добавление записей в словарь (для прекращения нажмите 0)?\n", INDENT);
+            printf("%sПродолжить добавление записей в словарь (для прекращения нажмите 0)?\n>>> ", INDENT);
             option = getch();
-            printf(">>> %c\n", option);
+            if ((option - '0') == 0)
+                printf("%c\n", option);
+            else
+                printf("Продолжение формирования словаря\n");
         }
     
     menu_manage_dict();
@@ -137,7 +115,7 @@ void menu_open()
             case 0:
                 printf("%sЗакрытие меню чтения, завершение программы\n", INDENT);
                 break;
-            case 1:
+            case 1: //ДОДЕЛАТЬ!
                 ; // здесь додлжна быть функция обработки ввода, связанного с адресом открытия
                 menu_manage_dict();
                 break;
@@ -170,15 +148,15 @@ void menu_manage_dict()
     while (selection_holder != 0)
         {
             user_input_reader(&selection_holder, options, N, "Меню управления словарем");
-            printf(">>> %d\n", selection_holder);
+            printf("%d\n", selection_holder);
             switch (selection_holder)
                 {
                     case 0: //выход
                         if (!save_flag)
                             {
-                                printf("%sСловарь не сохранен, сохранить (0 - нет)?\n", INDENT);
+                                printf("%sСловарь не сохранен, сохранить (0 - нет)?\n>>> ", INDENT);
                                 save_option = getch();
-                                printf(">>> %c\n", ((char) save_option));
+                                printf("%c\n", ((char) save_option));
                                 if ((save_option - '0') != 0)
                                     {
                                         save_flag = 1;
@@ -194,43 +172,47 @@ void menu_manage_dict()
                     case 1: //добавление записи или обновление определения
                         printf("\n%sДобавление новой записи\n", INDENT);
                         printf("%sВводимые строки должны оканчиваться символом '|'\n", INDENT);
-                        printf("%sВведите слово:\n", INDENT);
+                        printf("%sВведите слово:\n>>> ", INDENT);
                         name = read_name_from_console();
-                        printf("%sВведите определение:\n", INDENT);
+                        printf("%sВведите определение:\n>>> ", INDENT);
                         defn = read_defn_from_console();
                         write_to_dict(name, defn);
                         break;
                     case 2: //удаление записи
                         printf("\n%sУдаление существующей записи\n", INDENT);
                         printf("%sВводимые строки должны оканчиваться символом '|'\n", INDENT);
-                        printf("%sВведите слово:\n", INDENT);
-                        name = read_name_from_console();
+                        printf("%sВведите слово:\n>>> ", INDENT);
+                        name = read_name_from_console(false);
                         erase_from_dict(name);
+                        delete_name_from_table(name);
                         break;
                     case 3: //удаление определения
                         printf("\n%sУдаление определения\n", INDENT);
                         printf("%sВводимые строки должны оканчиваться символом '|'\n", INDENT);
-                        printf("%sВведите слово:\n", INDENT);
-                        name = read_name_from_console();
-                        write_to_dict(name, "");
+                        printf("%sВведите слово:\n>>> ", INDENT);
+                        name = read_name_from_console(false);
+                        erase_defn(name);
                         break;
                     case 4: //проверка наличия записи в словаре
                         printf("\n%sПроверка наличия записи в словаре\n", INDENT);
                         printf("%sВводимые строки должны оканчиваться символом '|'\n", INDENT);
-                        printf("%sВведите слово:\n", INDENT);
-                        name = read_name_from_console();
+                        printf("%sВведите слово:\n>>> ", INDENT);
+                        name = read_name_from_console(false);
                         find_record(name);
                         break;
                     case 5: //печать в консоль
                         menu_console_print();
                         break;
                     case 6: //сортировка
-                        break;
+                        break; //ДОДЕЛАТЬ!
                     case 7: //сохранить в файл
                         save_flag = true;
-                        break;
+                        break; //ДОДЕЛАТЬ!
                     case 8: //удалить словарь
-                        save_flag = true;
+                        extern str_table table_names;
+                        erase_all_dict(table_names.records, table_names.rows);
+                        delete_table();
+                        selection_holder = 0;
                         break;
                 }
         }
@@ -253,7 +235,7 @@ void menu_console_print()
     while (selection_holder != 0)
         {
             user_input_reader(&selection_holder, options, N, "Меню печати в консоль");
-            printf(">>> %d\n", selection_holder);
+            printf("%d\n", selection_holder);
             switch(selection_holder)
                 {
                     case 0:
