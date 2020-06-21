@@ -25,10 +25,10 @@ char *str_duplicate(char *str, bool print_flag)
         {
             copy_str = strcpy(copy_str, str);
             if (print_flag)
-                printf("FUNC %s -> строка '%s' успешно скопирована\n", fname, copy_str);
+                printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅ '%s' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n", fname, copy_str);
         }
     else
-        printf("FUNC %s -> не удалось выделить память\n", fname);
+        printf("FUNC %s -> пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n", fname);
     
     return copy_str;
 }
@@ -46,7 +46,7 @@ nlist *lookup(struct nlist **hashtable, char *name, bool print_flag)
         if (strcmp(name, np->name) == 0)
             {
                 if (print_flag)
-                    printf("FUNC %s -> термин '%s' уже в словаре\n", fname, name);
+                    printf("FUNC %s -> пїЅпїЅпїЅпїЅ '%s' пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n", fname, name);
                 return np;
             }
     
@@ -70,7 +70,7 @@ nlist *write_to_dict(struct nlist **hashtable,  char *name, char *defn, bool pri
             np->name = str_duplicate(name, str_duplicate_flag);
             if (np == NULL || np->name == NULL)
                 {
-                    printf("FUNC %s -> не удалось выделить память или скопировать строку с термином\n", fname);
+                    printf("FUNC %s -> пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n", fname);
                     return NULL;
                 }
             hashval = mhash(name);
@@ -78,12 +78,12 @@ nlist *write_to_dict(struct nlist **hashtable,  char *name, char *defn, bool pri
             hashtable[hashval] = np;
 
             if (print_flag)
-                printf("FUNC %s -> запись успешно добавлена\n", fname);
+                printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n", fname);
         }
     else
         if (print_flag)
             {
-                printf("FUNC %s -> термин уже в словаре, обновляем определение\n", fname);
+                printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n", fname);
                 free ((void*) np->defn);
             }
     
@@ -92,13 +92,13 @@ nlist *write_to_dict(struct nlist **hashtable,  char *name, char *defn, bool pri
     if (np->defn == NULL)
         {
             if (print_flag)
-                printf("FUNC %s -> не удалось выделить пмять для определения, присвоено занчение NULL\n", fname);
+                printf("FUNC %s -> пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ NULL\n", fname);
             return NULL;
         }
     
     if (print_flag)
         {
-            printf("FUNC %s -> в словарь внесена новая запись:\n", fname);
+            printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ:\n", fname);
             print_nlist(fname, np);
         }
 
@@ -132,10 +132,10 @@ void erase_from_dict(struct nlist **hashtable, char *name)
             free((void*) np->name);
             free((void*) np->defn);
             free((void*) np);
-            printf("FUNC %s -> запись с ключом '%s' удалена\n", fname, name);
+            printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅ c пїЅпїЅпїЅпїЅпїЅпїЅ '%s' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n", fname, name);
         }
     else
-        printf("FUNC %s -> запись с плючом '%s' в словаре отсутствует\n", fname, name);
+        printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅ c пїЅпїЅпїЅпїЅпїЅпїЅ '%s' пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n", fname, name);
 }
 
 
@@ -150,10 +150,10 @@ void erase_defn(struct nlist **hashtable, char *name)
     if (np != NULL)
         {
             np->defn = "";
-            printf("FUNC %s -> определение термина '%s' удалено\n", fname, name);
+            printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ '%s' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n", fname, name);
         }
     else
-        printf("FUNC %s -> запись с плючом '%s' в словаре отсутствует\n", fname, name);
+        printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ '%s' пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\n", fname, name);
 }
 
 
@@ -166,11 +166,11 @@ void find_record(struct nlist **hashtable, char *name)
 
     if (np != NULL)
         {
-            printf("FUNC %s -> запись с ключом '%s' найдена!\n", fname, name);
+            printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅ '%s' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!\n", fname, name);
             print_nlist(fname, np);
         }
     else
-        printf("FUNC %s -> запись с ключом '%s' НЕ найдена!\n", fname, name);
+        printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ '%s' пїЅпїЅпїЅпїЅпїЅпїЅпїЅ!\n", fname, name);
 }
 
 
@@ -189,7 +189,7 @@ void erase_all_dict(struct nlist **hashtable, char **records, int rows)
             free((void*) np->defn);
             free((void*) np);
         }
-    printf("FUNC %s -> словарь удален из памяти\n", fname);
+    printf("FUNC %s -> пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\n", fname);
 }
 
 

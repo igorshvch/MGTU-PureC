@@ -1,7 +1,6 @@
 #include "mmenu.h"
 
-static struct nlist *hashtable[HASHSIZE];
-static struct str_table *table_names;
+static nlist *hashtable[HASHSIZE];
 
 
 void user_input_reader(int *selection_holder, char **options, int options_num, char *menu_level)
@@ -43,9 +42,6 @@ void menu_main()
     const UINT CodePageID = 1251 ;
     SetConsoleCP(CodePageID);
     SetConsoleOutputCP(CodePageID);
-
-    
-    table_names = (struct str_table*) malloc(sizeof(struct str_table));
     
     const int N = 3;
     char *options[N] = {"Выход", "Создать из консоли", "Открыть из файла"};
@@ -82,10 +78,10 @@ void menu_create_from_console()
     while ((option - '0') != 0)
         {
             printf("%sВведите слово:\n>>> ", INDENT);
-            name = read_str_from_console(hashtable, table_names, true, true);
+            name = read_str_from_console(hashtable, true, true);
             printf("%sВведите определение:\n>>> ", INDENT);
-            defn = read_str_from_console(hashtable, table_names, false, false);
-            write_to_dict(hashtable, name, defn);
+            defn = read_str_from_console(hashtable, false, false);
+            write_to_dict(name, defn);
             printf("%sПродолжить добавление записей в словарь (для прекращения нажмите 0)?\n>>> ", INDENT);
             option = getch();
             if ((option - '0') == 0)
@@ -100,18 +96,12 @@ void menu_create_from_console()
 void menu_open()
 {
     char *file_path;
-    int i;
-    bool print_flag = false;
 
     printf("%sВведите путь к текстовому файлу со словарем\n", INDENT);
     printf("%sДиректории могут разделяться как символом '/', так и символом '\\'\n", INDENT);
     printf("%sВводимые строки должны оканчиваться символом '|'\n>>> ", INDENT);
-    file_path = read_str_from_console(hashtable, table_names, false, false, true);
-    printf("%sВводить подробную информацию об обработке файла (0 - нет)?\n>>> ", INDENT);
-    scanf("%d", &i);
-    print_flag = (bool) i;
-    print_flag ? printf(">>> Да\n", INDENT) : printf(">>> Нет\n", INDENT);
-    read_from_file(hashtable, table_names, file_path, print_flag);
+    file_path = read_str_from_console(false, false, true);
+    read_from_file(file_path);
     menu_manage_dict();
 }
 
@@ -164,32 +154,32 @@ void menu_manage_dict()
                         printf("\n%sДобавление новой записи\n", INDENT);
                         printf("%sВводимые строки должны оканчиваться символом '|'\n", INDENT);
                         printf("%sВведите слово:\n>>> ", INDENT);
-                        name = read_str_from_console(hashtable, table_names, true, true);
+                        name = read_str_from_console(true, true);
                         printf("%sВведите определение:\n>>> ", INDENT);
-                        defn = read_str_from_console(hashtable, table_names, false, false);
-                        write_to_dict(hashtable, name, defn);
+                        defn = read_str_from_console(false, false);
+                        write_to_dict(name, defn);
                         break;
                     case 2: //удаление записи
                         printf("\n%sУдаление существующей записи\n", INDENT);
                         printf("%sВводимые строки должны оканчиваться символом '|'\n", INDENT);
                         printf("%sВведите слово:\n>>> ", INDENT);
-                        name = read_str_from_console(hashtable, table_names, true, false);
-                        erase_from_dict(hashtable, name);
-                        delete_name_from_table(table_names, name);
+                        name = read_str_from_console(true, false);
+                        erase_from_dict(name);
+                        delete_name_from_table(name);
                         break;
                     case 3: //удаление определения
                         printf("\n%sУдаление определения\n", INDENT);
                         printf("%sВводимые строки должны оканчиваться символом '|'\n", INDENT);
                         printf("%sВведите слово:\n>>> ", INDENT);
-                        name = read_str_from_console(hashtable, table_names, true, false);
-                        erase_defn(hashtable, name);
+                        name = read_str_from_console(true, false);
+                        erase_defn(name);
                         break;
                     case 4: //проверка наличия записи в словаре
                         printf("\n%sПроверка наличия записи в словаре\n", INDENT);
                         printf("%sВводимые строки должны оканчиваться символом '|'\n", INDENT);
                         printf("%sВведите слово:\n>>> ", INDENT);
-                        name = read_str_from_console(hashtable, table_names, true, false);
-                        find_record(hashtable, name);
+                        name = read_str_from_console(true, false);
+                        find_record(name);
                         break;
                     case 5: //печать в консоль
                         menu_console_print();
@@ -201,9 +191,9 @@ void menu_manage_dict()
                         save_flag = true;
                         break; //ДОДЕЛАТЬ!
                     case 8: //удалить словарь
-                        //extern struct str_table table_names;
-                        erase_all_dict(hashtable, table_names->records, table_names->rows);
-                        delete_table(table_names);
+                        extern str_table table_names;
+                        erase_all_dict(table_names.records, table_names.rows);
+                        delete_table();
                         printf("%sЗакрытие меню управления словарем, завершение программы\n", INDENT);
                         selection_holder = 0;
                         break;
@@ -233,13 +223,13 @@ void menu_console_print()
                         printf("%sЗакрытие меню печати в консоль\n", INDENT);
                         break;
                     case 1:
-                        print_names(table_names);
+                        print_names();
                         break;
                     case 2:
-                        print_defns(hashtable, table_names);
+                        print_defns();
                         break;
                     case 3:
-                        print_all_dict_to_console(hashtable, table_names);
+                        print_all_dict_to_console();
                         break;
                 }
         }
@@ -266,20 +256,20 @@ void menu_sort()
                 printf("%sЗакрытие меню сортировка\n", INDENT);
                 break;
             case 1:
-                sort_names(table_names, true, true);
-                print_names(table_names);
+                sort_names(true, true);
+                print_names();
                 break;
             case 2:
-                sort_names(table_names, true, false);
-                print_names(table_names);
+                sort_names(true, false);
+                print_names();
                 break;
             case 3:
-                sort_names(table_names, false, true);
-                print_names(table_names);
+                sort_names(false, true);
+                print_names();
                 break;
             case 4:
-                sort_names(table_names, false, false);
-                print_names(table_names);
+                sort_names(false, false);
+                print_names();
                 break;
         }
 }

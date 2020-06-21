@@ -1,7 +1,7 @@
 #include "miohandler.h"
 
 
-char *read_str_from_console(struct nlist **hashtable, struct str_table *table_names, bool name_mode_flag, bool save_name_flag, bool format_path_flag)
+char *read_str_from_console(nlist **hashtable, bool name_mode_flag, bool save_name_flag, bool format_path_flag)
 {
     char *fname = "read_str_from_console";
 
@@ -44,7 +44,7 @@ char *read_str_from_console(struct nlist **hashtable, struct str_table *table_na
 
     if (save_name_flag)
         if (!lookup(hashtable, str_trunkate))
-            append_name_to_table(table_names, str_trunkate);
+            append_name_to_table(str_trunkate);
     
     if (format_path_flag)
         {
@@ -58,38 +58,28 @@ char *read_str_from_console(struct nlist **hashtable, struct str_table *table_na
 }
 
 
-void append_name_to_table(struct str_table *table_names, char *str, bool print_flag)
+void append_name_to_table(char *str)
 {
     char *fname = "append_name_to_table";
     
     char **tmp;
-    char *tmp_str;
     int rows;
 
-    (*table_names).rows++;
-    if (print_flag)
-        printf("FUNC %s -> количество строк в таблице терминов увеличено: %d\n", fname, (*table_names).rows);
+    table_names.rows++;
+    printf("FUNC %s -> количество строк в таблице терминов увеличено: %d\n", fname, table_names.rows);
 
-    tmp = (char**) realloc((*table_names).records, sizeof(char*)*(*table_names).rows);
-    if (!tmp)
+    tmp = (char**) realloc(table_names.records, sizeof(char*)*table_names.rows);
+    if (tmp == NULL)
         {
-            printf("\nFUNC %s -> не удалость выделить память для указателя, завершение выполнения функции\n\n", fname);
+            printf("\nFUNC %s -> не удалость выделить память, завершение выполнения функции\n\n", fname);
         }
-    (*table_names).records = tmp;
-
-    tmp_str = (char*) malloc(sizeof(char)*strlen(str)+1);
-    if (!tmp_str)
-        {
-            printf("\nFUNC %s -> не удалость выделить память для строки, завершение выполнения функции\n\n", fname);
-
-        }
-    (*table_names).records[(*table_names).rows-1] = strcpy(tmp_str, str);
-    if (print_flag)
-        printf("FUNC %s -> запись '%s' добавлена в таблицу терминов\n", fname, str);
+    table_names.records = tmp;
+    table_names.records[table_names.rows-1] = str;
+    printf("FUNC %s -> запись '%s' добавлена в таблицу терминов\n", fname, str);
 }
 
 
-void delete_name_from_table(struct str_table *table_names, char *str)
+void delete_name_from_table(char *str)
 {
     char *fname = "delete_name_from_table";
      
@@ -97,10 +87,10 @@ void delete_name_from_table(struct str_table *table_names, char *str)
     bool found_flag = false;
     char* tmp;
 
-    for (i=0; i<(*table_names).rows; i++)
-            if (strcmp((*table_names).records[i], str) == 0)
+    for (i=0; i<table_names.rows; i++)
+            if (strcmp(table_names.records[i], str) == 0)
                 {
-                    free((void*) (*table_names).records[i]);
+                    free((void*) table_names.records[i]);
                     found_flag = true;
                     printf("FUNC %s -> запись '%s' найдена в таблице терминов. Внутренний номер строки: %d\n", fname, str, i);
                     break;
@@ -110,19 +100,19 @@ void delete_name_from_table(struct str_table *table_names, char *str)
             if (i == 0)
                 {   
                     printf("FUNC %s -> удаляем запись на строке %d\n", fname, i);
-                    for (j=0; j<(*table_names).rows-1; j++)
-                        (*table_names).records[j] = (*table_names).records[j+1];
-                    free((void*) (*table_names).records[++j]);
+                    for (j=0; j<table_names.rows-1; j++)
+                        table_names.records[j] = table_names.records[j+1];
+                    free((void*) table_names.records[++j]);
                     printf("FUNC %s -> удаление прошло успешно\n", fname);
                 }
             else
                 {   
                     printf("FUNC %s -> удаляем запись на строке %d\n", fname, i);
-                    for (j=i; j<((*table_names).rows-1); j++)
-                        (*table_names).records[j] = (*table_names).records[j+1];
+                    for (j=i; j<(table_names.rows-1); j++)
+                        table_names.records[j] = table_names.records[j+1];
                     printf("FUNC %s -> удаление прошло успешно\n", fname);
                 }
-            (*table_names).rows--;
+            table_names.rows--;
             printf("FUNC %s -> запись '%s' удалена из таблицы терминов\n", fname, str);
         }
     else
@@ -130,25 +120,23 @@ void delete_name_from_table(struct str_table *table_names, char *str)
 }
 
 
-void delete_table(struct str_table *table_names)
+void delete_table()
 {
     char *fname = "delete_table";
     
     int i;
 
-    for(i=0; i<(*table_names).rows; i++)
-        free((void*) (*table_names).records[i]);
-    free((void*) (*table_names).records);
+    for(i=0; i<table_names.rows; i++)
+        free((void*) table_names.records[i]);
+    free((void*) table_names.records);
     
-    (*table_names).rows=0;
+    table_names.rows = 0;
 
-    free((void*) table_names);
-
-    printf("FUNC %s -> таблица терминов удалена из памяти\n", fname);
+    printf("FUNC %s -> таблица терминов удалена\n", fname);
 }
 
 
-void print_names(struct str_table *table_names)
+void print_names()
 {
     char *fname = "print_names";
 
@@ -159,17 +147,17 @@ void print_names(struct str_table *table_names)
     printf("\t| %4s |%-34s|\n", "#", "Слова");
     printf("\t-------------------------------------------\n");
 
-    if ((*table_names).rows < 20)
-        for (i=0; i<(*table_names).rows; i++)
-            printf("\t| %4d |%-34s|\n", i+1, (*table_names).records[i]);
+    if (table_names.rows < 20)
+        for (i=0; i<table_names.rows; i++)
+            printf("\t| %4d |%-34s|\n", i+1, table_names.records[i]);
     else
         {
             printf("FUNC %s -> В словаре более 20 записей, сокращенная печать 7 первых и 7 последних\n", fname);
             for (i=0; i<7; i++)
-                printf("\t| %4d |%-34s|\n", i+1, (*table_names).records[i]);
-            printf("\n\t.........\n\n");
-            for (i=((*table_names).rows-7); i<(*table_names).rows; i++)
-                printf("\t| %4d |%-34s|\n", i+1, (*table_names).records[i]);
+                printf("\t| %4d |%-34s|\n", i+1, table_names.records[i]);
+            printf("\n\n\t.........\n\n");
+            for (i=(table_names.rows-7); i<table_names.rows; i++)
+                printf("\t| %4d |%-34s|\n", i+1, table_names.records[i]);
         }
 
     
@@ -177,7 +165,7 @@ void print_names(struct str_table *table_names)
 }
 
 
-void print_defns(struct nlist **hashtable, struct str_table *table_names)
+void print_defns(nlist **hashtable)
 {
     char *fname = "print_defns";
     int i;
@@ -188,11 +176,11 @@ void print_defns(struct nlist **hashtable, struct str_table *table_names)
     printf("\t| %4s |%-34s|\n", "#", "Определения");
     printf("\t-------------------------------------------\n");
 
-    if ((*table_names).rows < 20)
+    if (table_names.rows < 20)
         {
-            for (i=0; i<(*table_names).rows; i++)
+            for (i=0; i<table_names.rows; i++)
                 {
-                    np = lookup(hashtable, (*table_names).records[i], false);
+                    np = lookup(hashtable, table_names.records[i], false);
                     if (np)
                         printf("\t| %4d |%-34s\n", i+1, np->defn);
                     else
@@ -204,16 +192,16 @@ void print_defns(struct nlist **hashtable, struct str_table *table_names)
             printf("FUNC %s -> В словаре более 20 записей, сокращенная печать 7 первых и 7 последних\n", fname);
             for (i=0; i<7; i++)
                 {
-                    np = lookup(hashtable, (*table_names).records[i], false);
+                    np = lookup(hashtable, table_names.records[i], false);
                     if (np != NULL)
                         printf("\t| %4d |%-34s\n", i+1, np->defn);
                     else
                         printf("FUNC %s -> ошибка в поиске определения, слово № %d: %s", fname, i, np->name);
                 }
-            printf("\n\t.........\n\n");
-            for (i=((*table_names).rows-7); i<(*table_names).rows; i++)
+            printf("\n\n\t.........\n\n");
+            for (i=(table_names.rows-7); i<table_names.rows; i++)
                 {
-                    np = lookup(hashtable, (*table_names).records[i], false);
+                    np = lookup(hashtable, table_names.records[i], false);
                     if (np)
                         printf("\t| %4d |%-34s\n", i+1, np->defn);
                     else
@@ -225,7 +213,7 @@ void print_defns(struct nlist **hashtable, struct str_table *table_names)
 }
 
 
-void print_all_dict_to_console(struct nlist **hashtable, struct str_table *table_names)
+void print_all_dict_to_console(nlist **hashtable)
 {
     char *fname = "print_all_dict_to_console";
     int i;
@@ -234,15 +222,15 @@ void print_all_dict_to_console(struct nlist **hashtable, struct str_table *table
 
     nlist *np;
 
-    if ((*table_names).rows < 20)
+    if (table_names.rows < 20)
         {
-            for (i=0; i<(*table_names).rows; i++)
+            for (i=0; i<table_names.rows; i++)
                 {
-                    np = lookup(hashtable, (*table_names).records[i], false);
+                    np = lookup(hashtable, table_names.records[i], false);
                     if (np != NULL)
                         {
                             printf("\n>>> %s\n", np->name);
-                            printf("%s <<<\n", np->defn);
+                            printf("%s\n", np->defn);
                         }
                     else
                         printf("FUNC %s -> ошибка в поиске определения, слово № %d: %s", fname, i, np->name);
@@ -253,23 +241,23 @@ void print_all_dict_to_console(struct nlist **hashtable, struct str_table *table
             printf("FUNC %s -> В словаре более 20 записей, сокращенная печать 7 первых и 7 последних\n", fname);
             for (i=0; i<7; i++)
                 {
-                    np = lookup(hashtable, (*table_names).records[i], false);
+                    np = lookup(hashtable, table_names.records[i], false);
                     if (np != NULL)
                         {
                             printf("\n>>> %s\n", np->name);
-                            printf("%s <<<\n", np->defn);
+                            printf("%s\n", np->defn);
                         }
                     else
                         printf("FUNC %s -> ошибка в поиске определения, слово № %d: %s", fname, i, np->name);
                 }
-            printf("\n\t......................................................\n");
-            for (i=((*table_names).rows-7); i<(*table_names).rows; i++)
+            printf("\n\n\t.........\n\n");
+            for (i=(table_names.rows-7); i<table_names.rows; i++)
                 {
-                    np = lookup(hashtable, (*table_names).records[i], false);
+                    np = lookup(hashtable, table_names.records[i], false);
                     if (np != NULL)
                         {
                             printf("\n>>> %s\n", np->name);
-                            printf("%s <<<\n", np->defn);
+                            printf("%s\n", np->defn);
                         }
                     else
                         printf("FUNC %s -> ошибка в поиске определения, слово № %d: %s", fname, i, np->name);
@@ -324,44 +312,43 @@ int compare_names_by_alph_from_z(const void *name1, const void *name2)
 }
 
 
-void sort_names(struct str_table *table_names, bool flag_alph, bool flag_order_from_min)
+void sort_names(bool flag_alph, bool flag_order_from_min)
 {
     char *fname = "sort_names";
 
     
     if (flag_alph && flag_order_from_min) 
         {
-            qsort((void*) (*table_names).records, (*table_names).rows, sizeof(char*), compare_names_by_alph_from_a);
+            qsort((void*) table_names.records, table_names.rows, sizeof(char*), compare_names_by_alph_from_a);
             printf("FUNC %s -> термины отсортированы в алфавитном восходящем порядке\n", fname);
         }
     else if (flag_alph && (!flag_order_from_min)) 
         {
-            qsort((void*) (*table_names).records, (*table_names).rows, sizeof(char*), compare_names_by_alph_from_z);
+            qsort((void*) table_names.records, table_names.rows, sizeof(char*), compare_names_by_alph_from_z);
             printf("FUNC %s -> термины отсортированы в алфавитном нисходящем порядке\n", fname);
         }
     else if ((!flag_alph) && flag_order_from_min) 
         {
-            qsort((void*) (*table_names).records, (*table_names).rows, sizeof(char*), compare_names_by_length_from_short);
+            qsort((void*) table_names.records, table_names.rows, sizeof(char*), compare_names_by_length_from_short);
             printf("FUNC %s -> термины отсортированы в порядке возрастания длины слова\n", fname);
         }
     else if ((!flag_alph) && (!flag_order_from_min))
         {
-            qsort((void*) (*table_names).records, (*table_names).rows, sizeof(char*), compare_names_by_length_from_long);
+            qsort((void*) table_names.records, table_names.rows, sizeof(char*), compare_names_by_length_from_long);
             printf("FUNC %s -> термины отсортированы в порядке убвания длины слова\n", fname);
         }
 }
 
 
-int read_from_file(struct nlist **hashtable, struct str_table *table_names, char *file_path, bool print_flag)
+int read_from_file(nlist **hashtable, char *file_path)
 {
-    char *fname = "read_from_file";
+    char *fname = "open_file";
     const int MAX_NAME_LEN = 100;
     const int MAX_DEFN_LEN = 1000;
     int i;
     char c = '0';
     char *name, *defn;
-    const bool write_to_dict_print_flag = print_flag;
-    const bool append_name_to_table_print_flag = print_flag;
+    const bool write_to_dict_print_flag = true;
 
     FILE *file_pointer(NULL);
 
@@ -372,38 +359,36 @@ int read_from_file(struct nlist **hashtable, struct str_table *table_names, char
             printf("FUNC %s -> не удалось открыть файл по адресу '%s'\n", fname, file_path);
             perror("Error: ");
             clearerr(file_pointer);
-            return -1;
+            return 1;
         }
     
     printf("FUNC %s -> открытие файла по адресу '%s'\n", fname, file_path);
     printf("FUNC %s -> в память будут записаны термины (не более 99 символов) и их определения (не более 999 символов)\n", fname);
 
+    if(feof(file_pointer))
+        {
+            printf("FUNC %s -> указатель на коцнке файла, позиция %ld\n", fname, ftell(file_pointer));
+        }
+    else
+        {
+            printf("FUNC %s -> указатель НЕ на коцнке файла, позиция %ld\n", fname, ftell(file_pointer));
+        }
+
     int count = 0;
     while (!feof(file_pointer))
         {
-            if (print_flag)
-                {
-                    printf("iter: %d \n", count);
-                    count++;
-                }
+            printf("iter: %d \n", count);
+            count++;
             i = 0;
             name = (char*) malloc(sizeof(char)*MAX_NAME_LEN);
             defn = (char*) malloc(sizeof(char)*MAX_DEFN_LEN);
-            if (print_flag)
-                {
-                    if (name && defn)
-                        printf("FUNC %s -> для термина И определения удалось выделить память\n", fname);
-                    else
-                        printf("FUNC %s -> для термина ИЛИ определения НЕ удалось выделить память\n", fname);
-                }
-            while (true)
+            if (name && defn)
+                printf("FUNC %s -> для термина И определения удалось выделить память\n", fname);
+            else
+                printf("FUNC %s -> для термина ИЛИ определения НЕ удалось выделить память\n", fname);
+            while (c != '|')
                 {
                     c = fgetc(file_pointer);
-                    if (c == '|')
-                        {
-                            i++;
-                            break;
-                        }
                     name[i] = c;
                     i++;
                     if (i==98)
@@ -413,35 +398,23 @@ int read_from_file(struct nlist **hashtable, struct str_table *table_names, char
             if (c != '|')
                 while (c != '|')
                     c = fgetc(file_pointer);
-            if (print_flag)
-                printf("FUNC %s -> считан термин '%s'\n", fname, name);
+            printf("FUNC %s -> считан термин '%s'\n", fname, name);
             i = 0;
-            while (true)
+            while (c != '\n')
                 {
                     c = fgetc(file_pointer);
-                    if (c == '\n' || feof(file_pointer))
-                        {
-                            i++;
-                            break;
-                        }
                     defn[i] = c;
                     i++;
                     if (i==998)
                         break;
                 }
             defn[i] = '\0';
-            if (print_flag)
-                printf("FUNC %s -> считано определение '%s'\n", fname, defn);
+            printf("FUNC %s -> считано определение '%s'\n", fname, defn);
             write_to_dict(hashtable, name, defn, write_to_dict_print_flag);
-            append_name_to_table(table_names, name, append_name_to_table_print_flag);
         }
     
     if (fclose(file_pointer) != EOF)
-        {
-            printf("FUNC %s -> чтение файла завершено, словарь записан в память\n", fname);
-            printf("FUNC %s -> в словарь записано %d терминов\n", fname, (*table_names).rows);
-            printf("FUNC %s -> закрытие файла по адресу '%s'\n", fname, file_path);
-        }
+        printf("FUNC %s -> закрытие файла по адресу '%s'\n", fname, file_path);
     else
         {
             perror("Error: ");
@@ -450,5 +423,3 @@ int read_from_file(struct nlist **hashtable, struct str_table *table_names, char
 
     return 0;    
 }
-
-
