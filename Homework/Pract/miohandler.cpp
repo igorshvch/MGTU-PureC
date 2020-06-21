@@ -1,4 +1,4 @@
-#include "miohandler.h"
+#include "mfuncs.h"
 
 
 char *read_str_from_console(struct nlist **hashtable, struct str_table *table_names, bool name_mode_flag, bool save_name_flag, bool format_path_flag)

@@ -1,4 +1,4 @@
-#include "mmenu.h"
+#include "mfuncs.h"
 
 static struct nlist *hashtable[HASHSIZE]; //структура объ€влена в mhach.h
 static struct str_table *table_names;     //стукрутар объ€влена в miohandler.h
