@@ -5,15 +5,12 @@
 
 #define HASHSIZE 1653789
 
-struct nlist
+struct nlist        //структура для хранения связного списка (используется для предотвращения коллизий хэш-функции)
 {
     struct nlist *next;
     char *name;
     char *defn;
 };
-
-
-//static nlist *hashtable[HASHSIZE];
 
 int mhash(char *str);
 char *str_duplicate(char *str, bool print_flag=true);

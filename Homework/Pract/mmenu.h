@@ -13,3 +13,4 @@ void menu_open();
 void menu_manage_dict();
 void menu_console_print();
 void menu_sort();
+void menu_save_to_file();

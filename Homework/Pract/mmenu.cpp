@@ -1,7 +1,7 @@
 #include "mmenu.h"
 
-static struct nlist *hashtable[HASHSIZE];
-static struct str_table *table_names;
+static struct nlist *hashtable[HASHSIZE]; //структура объявлена в mhach.h
+static struct str_table *table_names;     //стукрутар объявлена в miohandler.h
 
 
 void user_input_reader(int *selection_holder, char **options, int options_num, char *menu_level)
@@ -13,7 +13,7 @@ void user_input_reader(int *selection_holder, char **options, int options_num, c
     char option = '0';
     char last_option_char = options_num-1 + '0';
 
-    printf("\n%s%s%s\n", INDENT, INDENT, menu_level);
+    printf("\n%s%s%s\n", INDENT, INDENT, menu_level); //INDENT определен в файле mmenu.h
     printf("============================================================\n");
 
     while (true)
@@ -71,6 +71,10 @@ void menu_main()
 
 
 void menu_create_from_console()
+/*
+Меню создания словаря путем считывания консольного ввода и его записи в хэш-таблицу, а также
+записи терминов в таблицу терминов.
+*/
 {
     int option = '6';
 
@@ -98,9 +102,14 @@ void menu_create_from_console()
 
 
 void menu_open()
+/*
+Меню записи словаря в память из файла
+*/
 {
+    char *fname = "menu_open";
     char *file_path;
     int i;
+    signed int ret_val;
     bool print_flag = false;
 
     printf("%sВведите путь к текстовому файлу со словарем\n", INDENT);
@@ -111,11 +120,37 @@ void menu_open()
     scanf("%d", &i);
     print_flag = (bool) i;
     print_flag ? printf(">>> Да\n", INDENT) : printf(">>> Нет\n", INDENT);
-    read_from_file(hashtable, table_names, file_path, print_flag);
+    ret_val = read_from_file(hashtable, table_names, file_path, print_flag);
+    switch (ret_val) 
+    {
+        case 0:
+            printf("%sЧтение файла завершено, словарь записан в память\n", INDENT);
+            printf("%sВ словарь в памяти записано %d терминов\n", INDENT, (*table_names).rows);
+            break;
+        case -1:
+            printf("FUNC %s -> не удалось открыть файл по адресу '%s'! Данные не прочитаны!\n", fname, file_path);
+            break;
+        case -2:
+            printf("FUNC %s -> не удалось закрыть файл!\n", fname);
+            break;
+    }
+    free ((void*) file_path);
     menu_manage_dict();
 }
 
 void menu_manage_dict()
+/*
+Меню управления словарем в памяти.
+Пользователь может:
+1) добавить запись (обновить определение);
+2) удалить запись;
+3) удалить определение;
+4) проверить наличие термина в словаре;
+5) напечатать словарь в консоль (если словарь содержит более 20 записей, печать будет сокращена, см. функции печати в файле miohandler.cpp);
+6) отсортировать термины;
+7) сохранить словарь в файл;
+8) удалить словарь из памяти
+*/
 {
     bool save_flag = false;
     int save_option = 1;
@@ -151,13 +186,14 @@ void menu_manage_dict()
                                 if ((save_option - '0') != 0)
                                     {
                                         save_flag = 1;
-                                        ; // Здесь должны быть функция сохранения в файл
+                                        menu_save_to_file();
                                         printf("%sСловарь сохранен\n", INDENT);
                                     }
                                 else
                                     printf("%sСловарь не сохранен\n", INDENT);
-                                    
                             }
+                        erase_all_dict(hashtable, table_names->records, table_names->rows);
+                        delete_table(table_names);
                         printf("%sЗакрытие меню управления словарем, завершение программы\n", INDENT);
                         break;
                     case 1: //добавление записи или обновление определения
@@ -168,6 +204,7 @@ void menu_manage_dict()
                         printf("%sВведите определение:\n>>> ", INDENT);
                         defn = read_str_from_console(hashtable, table_names, false, false);
                         write_to_dict(hashtable, name, defn);
+                        save_flag = false;
                         break;
                     case 2: //удаление записи
                         printf("\n%sУдаление существующей записи\n", INDENT);
@@ -176,6 +213,8 @@ void menu_manage_dict()
                         name = read_str_from_console(hashtable, table_names, true, false);
                         erase_from_dict(hashtable, name);
                         delete_name_from_table(table_names, name);
+                        free((void*) name); //имя не заносится в таблицу терминов, освобождаем память, выделенную под строку ввода
+                        save_flag = false;
                         break;
                     case 3: //удаление определения
                         printf("\n%sУдаление определения\n", INDENT);
@@ -183,6 +222,8 @@ void menu_manage_dict()
                         printf("%sВведите слово:\n>>> ", INDENT);
                         name = read_str_from_console(hashtable, table_names, true, false);
                         erase_defn(hashtable, name);
+                        free((void*) name); //имя не заносится в таблицу терминов, освобождаем память, выделенную под строку ввода
+                        save_flag = false;
                         break;
                     case 4: //проверка наличия записи в словаре
                         printf("\n%sПроверка наличия записи в словаре\n", INDENT);
@@ -190,18 +231,20 @@ void menu_manage_dict()
                         printf("%sВведите слово:\n>>> ", INDENT);
                         name = read_str_from_console(hashtable, table_names, true, false);
                         find_record(hashtable, name);
+                        free((void*) name); //имя не заносится в таблицу терминов, освобождаем память, выделенную под строку ввода
                         break;
                     case 5: //печать в консоль
                         menu_console_print();
                         break;
                     case 6: //сортировка
                         menu_sort();
+                        save_flag = false;
                         break;
                     case 7: //сохранить в файл
+                        menu_save_to_file();
                         save_flag = true;
-                        break; //ДОДЕЛАТЬ!
+                        break;
                     case 8: //удалить словарь
-                        //extern struct str_table table_names;
                         erase_all_dict(hashtable, table_names->records, table_names->rows);
                         delete_table(table_names);
                         printf("%sЗакрытие меню управления словарем, завершение программы\n", INDENT);
@@ -213,6 +256,10 @@ void menu_manage_dict()
 
 
 void menu_console_print()
+/*
+Меню печати в консоль.
+Можно распечатать только термины, только определения, либо все словарные статьи (печать будет сокращенной, если в словаре более 20 записей, см. miohandler.cpp)
+*/
 {
     const int N = 4;
     char *options[N] = {
@@ -247,6 +294,12 @@ void menu_console_print()
 
 
 void menu_sort()
+/*
+Меню сортировки.
+Пользователь может отсортировать таблицу терминов по алфавиту, либо по длине слова.
+В обоих случаях можно выбирать прямой или обратный порядок. Сортировка терминов повлияет
+на печать в консоль и порядок сохранения словарных записей.
+*/
 {
     const int N = 5;
     char *options[N] = {
@@ -282,4 +335,36 @@ void menu_sort()
                 print_names(table_names);
                 break;
         }
+}
+
+
+void menu_save_to_file()
+/*
+Меню сохранения словаря в файл
+*/
+{
+    char *fname = "menu_save_to_file";
+    char *file_path;
+    int ret_val;
+    bool print_flag = false;
+
+    printf("%sВведите путь к текстовому файлу, в котором будет сохранен словарь (если файла нет, он будет создан; содержимое существующего файла будет сохранено, новые данные будут записаны в конце файла)\n", INDENT);
+    printf("%sДиректории могут разделяться как символом '/', так и символом '\\'\n", INDENT);
+    printf("%sВводимые строки должны оканчиваться символом '|'\n>>> ", INDENT);
+    file_path = read_str_from_console(hashtable, table_names, false, false, true);
+    ret_val = save_to_file(hashtable, table_names, file_path);
+    switch (ret_val) 
+    {
+        case 0:
+            printf("%sЗапись файла завершена, словарь записан на диск\n", INDENT);
+            printf("%sВ файл записано %d словарных записи(-ей)\n", INDENT, (*table_names).rows);
+            break;
+        case -1:
+            printf("FUNC %s -> не удалось открыть файл по адресу '%s'! Данные не записаны на диск!\n", file_path, fname);
+            break;
+        case -2:
+            printf("FUNC %s -> не удалось закрыть файл! Данные не записаны на диск!\n", fname);
+            break;
+    }
+    free((void*) file_path);
 }

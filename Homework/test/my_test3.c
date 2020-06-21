@@ -41,8 +41,12 @@ int main()
     //printf("Что находится в переменной hashtable2:%p\n", hashtable2);
       
     res = my_func();//nt);
-    
+
     printf("Результат => nt.records[%d]=%s, nt.rows=%d\n", (*nt).rows, (*nt).records[(*nt).rows], (*nt).rows);
+    free((void*) nt);
+    free((void*) nt);
+    printf("Удалили дважды, все ок\n");
+    
     return 0;
 }
 
