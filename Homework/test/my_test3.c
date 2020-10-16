@@ -31,7 +31,7 @@ int main()
     printf("Размер типа struct str_table: %d\n", sizeof(struct str_table));
     (*nt).rows = 0;
     printf("До изменений: nt.rows=%d\n", (*nt).rows);
-    (*nt).rows = 123;
+    nt->rows = 123;
     printf("После изменений: nt.rows=%d\n", (*nt).rows);
 
     int i, res;
