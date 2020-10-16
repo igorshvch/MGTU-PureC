@@ -1,0 +1,4 @@
+C:/Users/igors/My_Code/PureC/Work/Project_Morpheus/test_input1.txt|32|C:/Users/igors/My_Code/PureC/Work/Project_Morpheus/test_input2.txt|31|1|0.984127
+
+C:/Users/igors/My_Code/PureC/Work/Project_Morpheus/test_input1.txt|32|C:/Users/igors/My_Code/PureC/Work/Project_Morpheus/test_input2.txt|31|1|0.984127
+
