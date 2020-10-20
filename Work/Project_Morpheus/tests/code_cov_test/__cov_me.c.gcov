@@ -1,0 +1,19 @@
+        -:    0:Source:cov_me.c
+        -:    0:Graph:cov_me.gcno
+        -:    0:Data:cov_me.gcda
+        -:    0:Runs:1
+        -:    1:#include "cov_me.h"
+        -:    2:
+    #####:    3:int divisible(int i)
+        -:    4:{
+        -:    5:
+    #####:    6:  for (i = 1; i < 12; i++)
+        -:    7:    {
+    #####:    8:      if (i % 3 == 0)
+    #####:    9:        printf ("%d is divisible by 3\n", i);
+    #####:   10:      if (i % 11 == 0)
+    #####:   11:        printf ("%d is divisible by 11\n", i);
+        -:   12:    }
+        -:   13:
+    #####:   14:  return 0;
+        -:   15:}

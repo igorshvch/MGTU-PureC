@@ -1,0 +1,46 @@
+        -:    0:Source:test_cov_me.c
+        -:    0:Graph:test_cov_me.gcno
+        -:    0:Data:test_cov_me.gcda
+        -:    0:Runs:1
+        -:    1:#include <conio.h>
+        -:    2:#include <locale.h>
+        -:    3:#include <windows.h>
+        -:    4:#include "cov_me.h"
+        -:    5:
+        -:    6:static char *tested_module = "cov_me.c";
+        -:    7:
+        -:    8:void test_divisible();
+        -:    9:
+        1:   10:int main()
+        -:   11:{
+        1:   12:    setlocale(LC_ALL, "Russian_Russia.1251");
+        1:   13:    const UINT CodePageID = 1251 ;
+        1:   14:    SetConsoleCP(CodePageID);
+        1:   15:    SetConsoleOutputCP(CodePageID);
+        -:   16:
+        1:   17:    printf("Драйвер для тестирования модуля \"%s\"\n", tested_module);
+        1:   18:    test_divisible();
+        1:   19:    getch();
+        1:   20:    return 0;
+        -:   21:}
+        -:   22:
+        1:   23:void test_divisible()
+        -:   24:{
+        1:   25:    char *tested_func = "my_divisible";
+        1:   26:    int switcher = 1;
+        1:   27:    int i = 0;
+        -:   28:
+        1:   29:    printf("Модуль \"%s\" => тестирование функции \"%s\"\n", tested_module, tested_func);
+        -:   30:    
+        3:   31:    while (switcher) {
+        2:   32:        printf("\tВведите число: ");
+        2:   33:        scanf("%d", &i);
+        2:   34:        printf("Вы ввели: %d\n", i);
+        2:   35:        my_divisible(i);
+        2:   36:        printf("\n");
+        2:   37:        printf("\tДля выхода нажмите \"0\", для продолжения - \"1\" ");
+        2:   38:        scanf("%d", &switcher);
+        2:   39:        printf("\n");
+        -:   40:    }
+        1:   41:    printf("Модуль \"%s\" => окончание теста функции \"%s\"\n", tested_module, tested_func);
+        1:   42:}

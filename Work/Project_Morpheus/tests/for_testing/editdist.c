@@ -195,12 +195,10 @@ int compare_cycle_with_writing(char *directory_path, char *output_file_path, int
     int i, j, k, status, res; //,l ;
     double proc;
     const char *write_mode;
-    char *str1, *str2, *file_path1, *file_path2;//, *temp_res_holder, temp_string[600];
+    char *str1, *str2, *file_path1, *file_path2;
     EMPT_CHAR_MATRIX file_paths, *wrd_tbl1, *wrd_tbl2;
 
     //Инициализация переменных
-    //Инициализация строки для промежуточного хранения результатов
-    //temp_res_holder = (char*) calloc(CHUNK_SIZE_OUTPUT, sizeof(char));
     //Инициализация таблицы адресов
     file_paths.max_len = TEST_TABLE_LEN;
     file_paths.table = (char**) calloc(file_paths.max_len, sizeof(char*));
@@ -226,7 +224,6 @@ int compare_cycle_with_writing(char *directory_path, char *output_file_path, int
     status = list_directory_contents(directory_path, file_paths.table, &(file_paths.rows), (!verbose));
     if (status) {
         printf("ВНИМАНИЕ! Возникла ошибка при построении каталога файлов!\n");
-        //free((void*) temp_res_holder);
         free_2d_array_char(file_paths.table, file_paths.max_len, verbose);
         free_2d_array_char(wrd_tbl1->table, wrd_tbl1->max_len, verbose);
         free_2d_array_char(wrd_tbl2->table, wrd_tbl2->max_len, verbose);
@@ -241,7 +238,6 @@ int compare_cycle_with_writing(char *directory_path, char *output_file_path, int
     }
     //Цикл сравнения
     j = file_paths.rows;
-    //l = 0;
     for (i=file_paths.rows-1; i>0; i--) {
         file_path1 = file_paths.table[i];
         j--;  
@@ -252,33 +248,15 @@ int compare_cycle_with_writing(char *directory_path, char *output_file_path, int
             create_string_table(str1, wrd_tbl1, (!verbose));
             create_string_table(str2, wrd_tbl2, (!verbose));
             res = edit_distance_matrix(wrd_tbl1, wrd_tbl2, (!verbose));
-            //Вычисление процента соответствия фрагментов
             proc = 1.0 - ((double) res / ((double) (wrd_tbl1->rows > wrd_tbl2->rows ? wrd_tbl1->rows : wrd_tbl2->rows)));
-            //l += sprintf(temp_string, "%s|%d|%s|%d|%d|%.6f\n", file_path1, wrd_tbl1->rows, file_path2, wrd_tbl2->rows, res, proc);
             fprintf(output,  "%s|%d|%s|%d|%d|%.6f\n", file_path1, wrd_tbl1->rows, file_path2, wrd_tbl2->rows, res, proc);
-            /*strcat(temp_res_holder, temp_string);
-            if (l > (CHUNK_SIZE_OUTPUT-5000)) {
-                printf("\tЗапись в файл!");
-                fprintf(output,  "%s\n", temp_res_holder);
-                //write_to_file(output_file_path, temp_res_holder, "a", (!verbose));
-                free((void*) temp_res_holder);
-                temp_res_holder = (char*) calloc(CHUNK_SIZE_OUTPUT, sizeof(char));
-                l = 0;
-            }
-            */
-            //fprintf(output,  "%s\n", temp_res_holder);
             free((void*) str1);
             free((void*) str2);
         }
         printf("ПРОГОН № %d\n", file_paths.rows-j);
     }
-    //Записываем в файл остатки результатов
-    //fprintf(output,  "%s\n", temp_res_holder);
     fclose(output);
-    //write_to_file(output_file_path, temp_res_holder, "a", (!verbose));
 
-    //Освобождение памяти
-    //free((void*) temp_res_holder);
     free_2d_array_char(file_paths.table, file_paths.max_len, (!verbose));
     free_2d_array_char(wrd_tbl1->table, wrd_tbl1->max_len, (!verbose));
     free_2d_array_char(wrd_tbl2->table, wrd_tbl2->max_len, (!verbose));
