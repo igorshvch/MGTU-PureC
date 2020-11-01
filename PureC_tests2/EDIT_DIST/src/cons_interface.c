@@ -1,4 +1,4 @@
-#include "user_io.h"
+#include "cons_interface.h"
 
 /*
 int console_interface(char* path_folder, char* path_res_file, int (*proc_func)(char*))
@@ -45,59 +45,6 @@ int console_interface(char* path_folder, char* path_res_file, int (*proc_func)(c
             printf("Файл для записи результата: %s\n", path_res_file);
             switcher = 0;
         }
-    }
-}
-*/
-
-int verify_not_too_long_WIN(char* str)
-{
-    if (strlen(str) > (MAX_PATH-1))
-        return 1;
-    else
-        return 0;
-}
-
-
-int verify_only_permitted_symbols_WIN(char* str)
-{
-    int i;
-    char c;
-
-    for (i=0; i<(MAX_PATH-1); i++) {
-        c = str[i];
-        if (c==':' || c=='*' || c=='?' || c=='\"' || c=='<' || c=='>' || c=='|')
-            return 1;
-    }
-    return 0;
-}
-
-/*
-int verify_path_is_valid(char* str, char* mode)
-{
-    DWORD dwAttrib = GetFileAttributes(str);
-    
-    if (mode=="f") {
-        if (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
-            return 0;
-        else
-            return 1;
-    } else if (mode=="d") {
-        if (dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
-            return 0;
-        else
-            return 1;
-    }
-}
-
-void change_backslash_to_slash(char* str)
-{
-    int i;
-    char c;
-
-    for (i=0; i<(MAX_PATH-1); i++) {
-        c = str[i];
-        if (c=='\\')
-            str[i] = '/';
     }
 }
 */

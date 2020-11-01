@@ -1,5 +1,5 @@
-#include "build/temp/_test_user_io.c"
-#include "src/user_io.h"
+#include "build/temp/_test_user_input_check.c"
+#include "src/user_input_check.h"
 #include "C:/Users/igors/My_Code/PureC/PureC_tests2/EDIT_DIST/vendor/ceedling/vendor/unity/src/unity.h"
 
 
@@ -195,7 +195,7 @@ void test_verify_file_path_as_valid(void)
 
     char WIN_kernel_file[] = "\\kernel32.dll";
 
-    char fake_file[] = "\\file_name_should_be_here_instead_of_this_dummy_string.exe";
+    char fake_file[] = "\\file_name.exe";
 
 
 

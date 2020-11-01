@@ -2,7 +2,7 @@
 # Cheat-sheets:
 Contents:
 
-1. [Visual-studio code cheat-sheet](#Visual-studio-code-cheat-sheet)  
+1. [Visual Studio Code cheat-sheet](#Visual-studio-code-cheat-sheet)  
 2. [Markdown (*.md) code cheat-sheet](#Markdown-(*.md))  
 3. [Pure C code cheat-sheet](#Pure-C)
 4. [Ceedling cheat-sheet](#Ceedling)
@@ -11,7 +11,7 @@ Contents:
 ---
 
 
-1. ## Visual-studio code
+1. ## Visual Studio Code
     ### Markdown files preview
     * `Ctrl+Shift+V` - switch between views
     * `Ctrl+K V` - view the preview side-by-side

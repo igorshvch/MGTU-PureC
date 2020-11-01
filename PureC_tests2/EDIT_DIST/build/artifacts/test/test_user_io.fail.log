@@ -1,0 +1,11 @@
+test_user_io.c:61:test_verify_only_valid_symbols:INFO: Invalid symbol ':' at position 45
+test_user_io.c:61:test_verify_only_valid_symbols:INFO: Invalid symbol '*' at position 62
+test_user_io.c:61:test_verify_only_valid_symbols:INFO: Invalid symbol '?' at position 204
+test_user_io.c:61:test_verify_only_valid_symbols:INFO: Invalid symbol '"' at position 251
+test_user_io.c:61:test_verify_only_valid_symbols:INFO: Invalid symbol '<' at position 72
+test_user_io.c:61:test_verify_only_valid_symbols:INFO: Invalid symbol '>' at position 42
+test_user_io.c:61:test_verify_only_valid_symbols:INFO: Invalid symbol '|' at position 142
+test_user_io.c:85:test_verify_file_path_as_valid:INFO: REAL file path: C:\windows\system32\kernel32.dll
+test_user_io.c:87:test_verify_file_path_as_valid:INFO: FAKE file path: C:\windows\system32\file_name_should_be_here_instead_of_this_dummy_string.exe
+test_user_io.c:105:test_verify_dir_path_as_valid:INFO: REAL directory path: C:\windows\system32
+test_user_io.c:107:test_verify_dir_path_as_valid:INFO: FAKE file path: C:\Directory\path

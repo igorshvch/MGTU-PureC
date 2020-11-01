@@ -79,7 +79,7 @@ static void run_test(UnityTestFunction func, const char* name, int line_num)
 /*=======MAIN=====*/
 int main(void)
 {
-  UnityBegin("test_user_io.c");
+  UnityBegin("test_user_input_check.c");
   run_test(test_verify_not_too_long_file, "test_verify_not_too_long_file", 12);
   run_test(test_verify_not_too_long_dir, "test_verify_not_too_long_dir", 25);
   run_test(test_verify_only_valid_symbols, "test_verify_only_valid_symbols", 38);
