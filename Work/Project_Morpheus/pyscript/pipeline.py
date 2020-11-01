@@ -388,6 +388,20 @@ locale.setlocale(locale.LC_ALL, '')
 RL2 = [item[:-1] + ['{:n}'.format(item[-1])] for item in RL
 
 writer(('|'.join([str(i) for i in item]) for item in RL2), 'test_final_results_2', mode='w')
+
+def f(lst):
+    lst_res = []
+    pattern="B=PKP_D={}_M=0"
+    for item in lst:
+        p1, p2, p3, p4, p5, p6, p7, p8, p9 = item
+        p1 = pattern.format(p1.split('[')[1][:-1])
+        p5 = pattern.format(p5.split('[')[1][:-1])
+        lst_res.append([p1, p2, p3, p4, p5, p6, p7, p8, p9])
+    return lst_res
+
+RL3 = f(RL2)
+
+writer(('|'.join(item) for item in RL3), 'test_final_results3', mode='w')
 '''
 
 ###############################################################################

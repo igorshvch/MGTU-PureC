@@ -1,0 +1,141 @@
+<html>
+    <head>
+        <title>Поиск общих фрагментов</title>
+        <script src="mydiff.js"></script>
+        <style>
+          body {
+              background: rgb(255, 250, 221);
+              font-family: 'Times New Roman', Times, serif;
+              font-size: 12pt;
+          }
+
+          div {
+              font-family: 'Times New Roman', Times, serif;
+              font-size: 12pt;
+          }
+          
+          textarea, #diff1, #diff2 {
+              background: rgb(254, 255, 246);
+          }
+
+          textarea {
+              font-family: 'Times New Roman', Times, serif;
+              font-size: 12pt;
+              padding: 3px;
+              resize: none;
+              margin: 5 2.5px;
+              float: left;
+              width: 49%;
+              height: 33%;
+          }
+
+          #diff1, #diff2 {
+              padding: 3px;
+              text-align: justify;
+              overflow: auto;
+              margin: 5 2.5px;
+              box-sizing: border-box;
+              border-radius: 2px;
+              float: left;
+              width: 49%;
+              height: 60%;
+              border: solid 1px black;
+          }
+
+          .del {
+              background-color: rgb(255, 190, 190);
+              text-decoration: line-through;
+          }
+
+          .new {
+              background-color:rgb(174, 253, 54);
+          }
+
+          .equal {
+            background-color:rgb(247, 225, 255);
+          }
+
+          #len1, #len2, #common {
+              width: 20px;
+              background: rgb(245, 215, 43);
+          }
+
+          button {
+              margin: 0 5px;
+              position: left;
+              top: 0;
+              left: 0;
+          }
+
+          #low {
+              box-sizing: border-box;
+              margin: 0 5px;
+          }
+        </style>
+    </head>
+    <body onload="init()">
+        <script type="text/javascript">
+            
+            var aLines = "Введите отрывок 1";
+            var bLines = "Введите отрывок 2";
+            
+            function init() {
+              document.getElementById("len1").innerHTML = 0;
+              document.getElementById("len2").innerHTML = 0;
+              document.getElementById("common").innerHTML = 0;
+            }
+            
+            function calcDiff() {
+              console.log("Action1!");
+              var a = document.getElementById("aLines").value;
+              var b = document.getElementById("bLines").value;
+              let res_s1, res_s2, len1, len2, common;
+              [res_s1, res_s2, len1, len2, common] = LCS_main(a , b);
+              document.getElementById("diff1").innerHTML = res_s1;
+              document.getElementById("diff2").innerHTML = res_s2;
+              document.getElementById("len1").innerHTML = len1;
+              document.getElementById("len2").innerHTML = len2;
+              document.getElementById("common").innerHTML = common;
+            }
+
+            function clean() {
+              document.getElementById("aLines").value = '';
+              document.getElementById("bLines").value = '';
+              document.getElementById("diff1").innerHTML = null;
+              document.getElementById("diff2").innerHTML = null;
+              document.getElementById("len1").innerHTML = 0;
+              document.getElementById("len2").innerHTML = 0;
+              document.getElementById("common").innerHTML = 0;
+            }
+
+            function clean_output() {
+              document.getElementById("diff1").innerHTML = null;
+              document.getElementById("diff2").innerHTML = null;
+              document.getElementById("common").innerHTML = 0;
+            }
+
+            function clean_except() {
+              document.getElementById("bLines").value = '';
+              document.getElementById("diff1").innerHTML = null;
+              document.getElementById("diff2").innerHTML = null;
+              document.getElementById("len2").innerHTML = 0;
+              document.getElementById("common").innerHTML = 0;
+            }
+          </script>
+          <div>
+              <textarea placeholder="Введите отрывок № 1" id="aLines"></textarea>
+              <textarea placeholder="Введите отрывок № 2"id="bLines"></textarea>
+          </div>
+              <button type="button" onclick="calcDiff()" style="margin:0 5px; position:left; top:0; left:0"><span style="font-weight:bold;">Сравнить</span></button>
+              <button type="button" onclick="clean()" style="margin:0 5px; position:left; top:0; left:0"><span style="font-weight:bold;">Очистить все</span></button>
+              <button type="button" onclick="clean_output()" style="margin:0 5px; position:left; top:0; left:0">Очистить только результат</button>
+              <button type="button" onclick="clean_except()" style="margin:0 5px; position:left; top:0; left:0">Очистить все кроме одного</button>
+          <div>
+              <div id="diff1"></div>
+              <div id="diff2"></div>
+          </div>
+          <div id="low">
+              Статистика. Длина отрывка 1: <span id="len1"></span>, длина отрывка 2: <span id="len2"></span>, процент совпадения: <span id="common"></span>%
+          </div>
+    </body>
+</html>
