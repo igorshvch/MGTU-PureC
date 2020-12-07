@@ -13,3 +13,7 @@ src/editdist.c:
 - TEST
 src/process_text.c:
 - TEST
+src/sys_test.c:
+- TEST
+src/sys_test_edit.c:
+- TEST

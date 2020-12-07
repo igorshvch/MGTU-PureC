@@ -1,4 +1,4 @@
-#include "sys_test.h"
+#include "sys_test_edit.h"
 
 char* global_test(char *stream1, char *stream2)
 {
@@ -23,7 +23,10 @@ char* global_test(char *stream1, char *stream2)
 );
     res = count_edit_dist(1, "", "", input, stream1, stream2);
 
-    str_res = write_to_file(1, output, "", stream3,  res);
+    if (res != 0)
+        str_res = write_to_file(1, output, "", stream3,  res);
+    else
+        str_res = "Zero length";
 
     return str_res;
 }

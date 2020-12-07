@@ -1,0 +1,2 @@
+test_sys_test_edit.c:28:test_global_test:INFO: First print
+test_sys_test_edit.c:29:test_global_test:INFO: editorial distance equals to 1\n

@@ -1,0 +1,20 @@
+---
+:source:
+  :path: test
+  :file: test_sys_test_edit.c
+:successes:
+- :test: test_global_test
+  :line: 19
+  :message: ''
+  :unity_test_time: 0
+:failures: []
+:ignores: []
+:counts:
+  :total: 1
+  :passed: 1
+  :failed: 0
+  :ignored: 0
+:stdout:
+- 'test_sys_test_edit.c:28:test_global_test:INFO: First print'
+- 'test_sys_test_edit.c:29:test_global_test:INFO: editorial distance equals to 1\n'
+:time: 4.406049399985932
