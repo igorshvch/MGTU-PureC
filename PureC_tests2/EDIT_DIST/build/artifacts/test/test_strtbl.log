@@ -1,0 +1,2 @@
+test_strtbl.c:31:test_create_string_table:INFO: Memory allocated
+test_strtbl.c:45:test_create_string_table:INFO: Memory freed

@@ -25,6 +25,20 @@ int main()
 
     printf("lets try hardcopy: %s\n", strcat(buf1, buf2));
 
+    int i, temp;
+    srand(1);
+
+    printf("======================\n");
+    for (i=0; i<20; i++) {
+        temp = rand();
+        printf("\t%d\t\t\t%8d\n", temp, temp);
+    }
+    printf("======================\n");
+    for (i=0; i<200; i++) {
+        printf("%d)\n", i);
+    }
+
+    printf("======================\n");
     getch();
     return 0;
 }

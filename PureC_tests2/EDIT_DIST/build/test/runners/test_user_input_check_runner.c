@@ -11,10 +11,8 @@ char* GlobalOrderError;
 extern void setUp(void);
 extern void tearDown(void);
 extern void test_verify_not_too_long_file(void);
-extern void test_verify_not_too_long_dir(void);
 extern void test_verify_only_valid_symbols(void);
 extern void test_verify_file_path_as_valid(void);
-extern void test_verify_dir_path_as_valid(void);
 extern void test_change_backslash_to_slash(void);
 
 
@@ -81,11 +79,9 @@ int main(void)
 {
   UnityBegin("test_user_input_check.c");
   run_test(test_verify_not_too_long_file, "test_verify_not_too_long_file", 12);
-  run_test(test_verify_not_too_long_dir, "test_verify_not_too_long_dir", 25);
-  run_test(test_verify_only_valid_symbols, "test_verify_only_valid_symbols", 38);
-  run_test(test_verify_file_path_as_valid, "test_verify_file_path_as_valid", 67);
-  run_test(test_verify_dir_path_as_valid, "test_verify_dir_path_as_valid", 93);
-  run_test(test_change_backslash_to_slash, "test_change_backslash_to_slash", 113);
+  run_test(test_verify_only_valid_symbols, "test_verify_only_valid_symbols", 40);
+  run_test(test_verify_file_path_as_valid, "test_verify_file_path_as_valid", 69);
+  run_test(test_change_backslash_to_slash, "test_change_backslash_to_slash", 117);
 
   return UnityEnd();
 }

@@ -3,3 +3,13 @@ src/user_io.c:
 - TEST
 src/user_input_check.c:
 - TEST
+src/cons_interface.c:
+- TEST
+src/readwrite.c:
+- TEST
+src/strtbl.c:
+- TEST
+src/editdist.c:
+- TEST
+src/process_text.c:
+- TEST

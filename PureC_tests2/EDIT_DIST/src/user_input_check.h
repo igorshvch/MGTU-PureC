@@ -15,5 +15,4 @@ int verify_not_too_long_file(char* str);
 int verify_not_too_long_dir(char* str);
 int verify_only_valid_symbols(char* str);
 int verify_file_path_as_valid(char* str);
-int verify_dir_path_as_valid(char* str);
 int change_backslash_to_slash(char* str);

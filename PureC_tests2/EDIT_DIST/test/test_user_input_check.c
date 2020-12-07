@@ -22,6 +22,7 @@ void test_verify_not_too_long_file(void)
     TEST_ASSERT_EQUAL_INT(1, verify_not_too_long_file(test_str2));
 }
 
+/*
 void test_verify_not_too_long_dir(void)
 {
     int i = 0;
@@ -34,6 +35,7 @@ void test_verify_not_too_long_dir(void)
     TEST_ASSERT_EQUAL_INT(0, verify_not_too_long_dir(test_str1));
     TEST_ASSERT_EQUAL_INT(1, verify_not_too_long_dir(test_str2));
 }
+*/
 
 void test_verify_only_valid_symbols(void)
 {
@@ -44,11 +46,11 @@ void test_verify_only_valid_symbols(void)
     const int range = 258;
     
     char message_cash[1000];
-    char invalid_symbols[7] = {':', '*', '?', '\"', '<', '>', '|'};
-    char invalid_strings[7][MAX_PATH];
+    char invalid_symbols[6] = {'*', '?', '\"', '<', '>', '|'};//char invalid_symbols[7] = {':', '*', '?', '\"', '<', '>', '|'};
+    char invalid_strings[6][MAX_PATH];//char invalid_strings[7][MAX_PATH];
     char valid_string[] = "some_strging_without_invalid_symbols";
 
-    for (i=0; i<7; i++) {
+    for (i=0; i<6; i++) {//for (i=0; i<7; i++) {
         for (j=0; j<MAX_PATH-1; j++)
             invalid_strings[i][j] = 's';
         invalid_strings[i][j] = '\0';
@@ -56,7 +58,7 @@ void test_verify_only_valid_symbols(void)
         invalid_strings[i][invalid_symbols_position[i]] = invalid_symbols[i];
     }
 
-    for (i=0; i<7; i++) {
+    for (i=0; i<6; i++) {//for (i=0; i<7; i++) {
         sprintf(message_cash, "Invalid symbol \'%c\' at position %d", invalid_symbols[i], invalid_symbols_position[i]);
         TEST_MESSAGE(message_cash);
         TEST_ASSERT_EQUAL_INT(1, verify_only_valid_symbols(invalid_strings[i]));
@@ -90,6 +92,7 @@ void test_verify_file_path_as_valid(void)
     TEST_ASSERT_EQUAL_INT(1, verify_file_path_as_valid(path_fake));
 }
 
+/*
 void test_verify_dir_path_as_valid(void)
 {
     int path_size = 32767;
@@ -109,6 +112,7 @@ void test_verify_dir_path_as_valid(void)
     TEST_ASSERT_EQUAL_INT(0, verify_dir_path_as_valid(path_real));
     TEST_ASSERT_EQUAL_INT(1, verify_dir_path_as_valid(path_fake));
 }
+*/
 
 void test_change_backslash_to_slash(void)
 {

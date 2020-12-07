@@ -59,50 +59,6 @@ void test_verify_not_too_long_file(void)
 
 }
 
-
-
-void test_verify_not_too_long_dir(void)
-
-{
-
-    int i = 0;
-
-    char test_str1[] = "string_of_proper_length";
-
-    char test_str2[(
-
-                   260
-
-                           /2)+1];
-
-
-
-    for (i=0; i<(
-
-                260
-
-                        /2); i++)
-
-        test_str2[i] = 's';
-
-    test_str2[i] = '\0';
-
-    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((verify_not_too_long_dir(test_str1))), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(34), UNITY_DISPLAY_STYLE_INT);
-
-    UnityAssertEqualNumber((UNITY_INT)((1)), (UNITY_INT)((verify_not_too_long_dir(test_str2))), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(35), UNITY_DISPLAY_STYLE_INT);
-
-}
-
-
-
 void test_verify_only_valid_symbols(void)
 
 {
@@ -121,9 +77,9 @@ void test_verify_only_valid_symbols(void)
 
     char message_cash[1000];
 
-    char invalid_symbols[7] = {':', '*', '?', '\"', '<', '>', '|'};
+    char invalid_symbols[6] = {'*', '?', '\"', '<', '>', '|'};
 
-    char invalid_strings[7][
+    char invalid_strings[6][
 
                            260
 
@@ -133,7 +89,7 @@ void test_verify_only_valid_symbols(void)
 
 
 
-    for (i=0; i<7; i++) {
+    for (i=0; i<6; i++) {
 
         for (j=0; j<
 
@@ -153,17 +109,17 @@ void test_verify_only_valid_symbols(void)
 
 
 
-    for (i=0; i<7; i++) {
+    for (i=0; i<6; i++) {
 
         sprintf(message_cash, "Invalid symbol \'%c\' at position %d", invalid_symbols[i], invalid_symbols_position[i]);
 
-        UnityMessage((message_cash), 61);
+        UnityMessage((message_cash), 63);
 
         UnityAssertEqualNumber((UNITY_INT)((1)), (UNITY_INT)((verify_only_valid_symbols(invalid_strings[i]))), (
 
        ((void *)0)
 
-       ), (UNITY_UINT)(62), UNITY_DISPLAY_STYLE_INT);
+       ), (UNITY_UINT)(64), UNITY_DISPLAY_STYLE_INT);
 
     }
 
@@ -171,7 +127,7 @@ void test_verify_only_valid_symbols(void)
 
    ((void *)0)
 
-   ), (UNITY_UINT)(64), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(66), UNITY_DISPLAY_STYLE_INT);
 
 }
 
@@ -221,11 +177,11 @@ void test_verify_file_path_as_valid(void)
 
     sprintf(&(message_cash[0]), "REAL file path: %s", path_real);
 
-    UnityMessage((message_cash), 85);
+    UnityMessage((message_cash), 87);
 
     sprintf(&(message_cash[0]), "FAKE file path: %s", path_fake);
 
-    UnityMessage((message_cash), 87);
+    UnityMessage((message_cash), 89);
 
 
 
@@ -233,69 +189,15 @@ void test_verify_file_path_as_valid(void)
 
    ((void *)0)
 
-   ), (UNITY_UINT)(89), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(91), UNITY_DISPLAY_STYLE_INT);
 
     UnityAssertEqualNumber((UNITY_INT)((1)), (UNITY_INT)((verify_file_path_as_valid(path_fake))), (
 
    ((void *)0)
 
-   ), (UNITY_UINT)(90), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(92), UNITY_DISPLAY_STYLE_INT);
 
 }
-
-
-
-void test_verify_dir_path_as_valid(void)
-
-{
-
-    int path_size = 32767;
-
-    char path_real[32767];
-
-
-
-    char path_fake[] = "C:\\Directory\\path";
-
-
-
-    char message_cash[1000];
-
-
-
-    
-
-   GetSystemDirectoryA
-
-                     (path_real, path_size);
-
-
-
-    sprintf(&(message_cash[0]), "REAL directory path: %s", path_real);
-
-    UnityMessage((message_cash), 105);
-
-    sprintf(&(message_cash[0]), "FAKE file path: %s", path_fake);
-
-    UnityMessage((message_cash), 107);
-
-
-
-    UnityAssertEqualNumber((UNITY_INT)((0)), (UNITY_INT)((verify_dir_path_as_valid(path_real))), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(109), UNITY_DISPLAY_STYLE_INT);
-
-    UnityAssertEqualNumber((UNITY_INT)((1)), (UNITY_INT)((verify_dir_path_as_valid(path_fake))), (
-
-   ((void *)0)
-
-   ), (UNITY_UINT)(110), UNITY_DISPLAY_STYLE_INT);
-
-}
-
-
 
 void test_change_backslash_to_slash(void)
 
@@ -313,7 +215,7 @@ void test_change_backslash_to_slash(void)
 
     sprintf(&(message_cash[0]), "Test string before alteration: %10s", test_str_slash);
 
-    UnityMessage((message_cash), 121);
+    UnityMessage((message_cash), 125);
 
 
 
@@ -321,25 +223,25 @@ void test_change_backslash_to_slash(void)
 
    ((void *)0)
 
-   ), (UNITY_UINT)(123), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(127), UNITY_DISPLAY_STYLE_INT);
 
     UnityAssertEqualIntArray(UnityNumToPtr((UNITY_INT)(UNITY_INT8 )(('/')), 1), ( const void*)((test_str_slash)), (UNITY_UINT32)((strlen(test_str_slash))), (
 
    ((void *)0)
 
-   ), (UNITY_UINT)(124), UNITY_DISPLAY_STYLE_CHAR, UNITY_ARRAY_TO_VAL);
+   ), (UNITY_UINT)(128), UNITY_DISPLAY_STYLE_CHAR, UNITY_ARRAY_TO_VAL);
 
 
 
     sprintf(&(message_cash[0]), "Test string after alteration: %11s", test_str_slash);
 
-    UnityMessage((message_cash), 127);
+    UnityMessage((message_cash), 131);
 
 
 
     sprintf(&(message_cash[0]), "Test string before alteration: %10s", test_str_char);
 
-    UnityMessage((message_cash), 130);
+    UnityMessage((message_cash), 134);
 
 
 
@@ -347,18 +249,18 @@ void test_change_backslash_to_slash(void)
 
    ((void *)0)
 
-   ), (UNITY_UINT)(132), UNITY_DISPLAY_STYLE_INT);
+   ), (UNITY_UINT)(136), UNITY_DISPLAY_STYLE_INT);
 
     UnityAssertEqualIntArray(UnityNumToPtr((UNITY_INT)(UNITY_INT8 )(('s')), 1), ( const void*)((test_str_char)), (UNITY_UINT32)((strlen(test_str_char))), (
 
    ((void *)0)
 
-   ), (UNITY_UINT)(133), UNITY_DISPLAY_STYLE_CHAR, UNITY_ARRAY_TO_VAL);
+   ), (UNITY_UINT)(137), UNITY_DISPLAY_STYLE_CHAR, UNITY_ARRAY_TO_VAL);
 
 
 
     sprintf(&(message_cash[0]), "Test string after alteration: %11s", test_str_char);
 
-    UnityMessage((message_cash), 136);
+    UnityMessage((message_cash), 140);
 
 }

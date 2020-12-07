@@ -1,0 +1,2 @@
+test_editdist.c:25:test_create_zero_matrix:INFO: Memory allocated
+test_editdist.c:34:test_create_zero_matrix:INFO: Memory freed

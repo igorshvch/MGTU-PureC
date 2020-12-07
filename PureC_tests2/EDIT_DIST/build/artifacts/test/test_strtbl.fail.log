@@ -1,0 +1,3 @@
+test_strtbl.c:33:test_create_string_table:INFO: Memory allocated
+test_strtbl.c:37:test_create_string_table:INFO: test rows: 5, res rows: 5
+test_strtbl.c:43:test_create_string_table:INFO: test rows: 5, res rows: 0

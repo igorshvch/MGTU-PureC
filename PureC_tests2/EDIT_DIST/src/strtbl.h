@@ -1,8 +1,3 @@
-#ifndef READWRITE
-    #define READWRITE
-    #include "readwrite.h"
-#endif
-
 #ifndef BASIC_FILES
     #define BASIC_FILES
     #include <stdio.h>
@@ -20,9 +15,9 @@
         int max_len;
     };
     #define EMPT_CHAR_MATRIX struct my_matrix
+    #define CHAR_MATRIX_ROWS 5000 //максимальное количество слов в таблице
+    #define WORD_LEN 400 //максимальная длина одного слова
 #endif
 
-#define CHAR_MATRIX_ROWS 50000 //максимальное количество слов в таблице
-#define WORD_LEN 400 //максимальная длина одного слова
 
-void create_string_table(char *my_string, EMPT_CHAR_MATRIX *wrd_tbl, int verbose);
+void create_string_table(char *my_string, EMPT_CHAR_MATRIX *wrd_tbl);

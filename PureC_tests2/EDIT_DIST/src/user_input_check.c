@@ -8,7 +8,7 @@ int verify_not_too_long_file(char* str)
         return 0;
 }
 
-
+/*
 int verify_not_too_long_dir(char* str)
 {
     if (strlen(str) > ((MAX_PATH/2)-1))
@@ -16,6 +16,7 @@ int verify_not_too_long_dir(char* str)
     else
         return 0;
 }
+*/
 
 
 int verify_only_valid_symbols(char* str)
@@ -27,7 +28,7 @@ int verify_only_valid_symbols(char* str)
 
     for (i=0; i<len; i++) {
         c = str[i];
-        if (c==':' || c=='*' || c=='?' || c=='\"' || c=='<' || c=='>' || c=='|')
+        if (c=='*' || c=='?' || c=='\"' || c=='<' || c=='>' || c=='|')//(c==':' || c=='*' || c=='?' || c=='\"' || c=='<' || c=='>' || c=='|')
             return 1;
     }
     return 0;
@@ -43,6 +44,7 @@ int verify_file_path_as_valid(char* str)
         return 1;
 }
 
+/*
 int verify_dir_path_as_valid(char* str)
 {
     DWORD dwAttrib = GetFileAttributes(str);
@@ -52,6 +54,7 @@ int verify_dir_path_as_valid(char* str)
     else
         return 1;
 }
+*/
 
 int change_backslash_to_slash(char* str)
 {
